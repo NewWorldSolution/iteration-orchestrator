@@ -1,0 +1,31 @@
+# Minimal zero-domain orchestrator pack.
+
+project:
+  name: minimal-example
+  main_branch: main
+  phase_branch_pattern: "phase-{phase}"
+  iteration_branch_pattern: "{phase}/iteration-{n}"
+  task_branch_pattern: "{phase}/i{n}/t{k}-{slug}"
+
+stack:
+  test: "pytest -q"
+  lint: "ruff check ."
+
+risk:
+  high_risk_globs: []
+  sensitive_files: []
+  forbidden_patterns: []
+
+agents:
+  local:
+    type: shell
+    cmd: "python -c 'print(\"replace with your agent command\")'"
+    family: local
+
+costs:
+  local:
+    input: 0.0
+    output: 0.0
+
+auto_merge:
+  no_ci: false

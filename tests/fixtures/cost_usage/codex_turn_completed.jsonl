@@ -1,0 +1,4 @@
+{"type":"turn.started","model":"gpt-5.4","usage":{"input_tokens":999999,"cached_input_tokens":999999,"output_tokens":999999,"reasoning_output_tokens":999999}}
+{"type":"turn.completed","model":"gpt-5.4","usage":{"input_tokens":4000,"cached_input_tokens":1000,"output_tokens":500,"reasoning_output_tokens":200}}
+{"type":"item.completed","model":"gpt-5.4","usage":{"input_tokens":999999,"cached_input_tokens":999999,"output_tokens":999999,"reasoning_output_tokens":999999}}
+{"type":"turn.completed","model":"gpt-5.4","usage":{"input_tokens":5000,"input_tokens_details":{"cached_tokens":2000},"output_tokens":700,"output_tokens_details":{"reasoning_tokens":300}}}

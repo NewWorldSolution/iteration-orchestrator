@@ -1,0 +1,46 @@
+# Packaging for the standalone orchestrator repo.
+# Package discovery assumes the `orch/` package layout used by this repo.
+# Adjust `packages` and the console script only if the package name changes.
+
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "iteration-orchestrator"
+version = "0.1.0"
+description = "Deterministic control plane for driving LLM coding agents through governed iterations (implement -> gates -> multi-reviewer QA -> retrospective)."
+readme = "README.md"
+requires-python = ">=3.11"
+authors = [{ name = "Burak Kilic" }]
+keywords = ["llm", "agents", "orchestration", "sdlc", "code-review", "governance"]
+
+# Runtime deps are intentionally tiny — everything else is stdlib.
+dependencies = [
+  "jsonschema>=4",
+  "PyYAML>=6",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8",
+  "pytest-xdist>=3",
+  "ruff>=0.6",
+]
+
+# Console entry point. Requires orch/__main__.py to expose `main()`.
+# If it does not (and can't be trivially wired), delete this table and document
+# `python -m orch` as the entry in the README (E4 verifies which one works).
+[project.scripts]
+orch = "orch.__main__:main"
+
+# Discover the package AND its subpackages (orch.agents, orch.hooks, …).
+# `packages = ["orch"]` would ship only the top level and break imports.
+[tool.setuptools.packages.find]
+include = ["orch*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+target-version = "py311"

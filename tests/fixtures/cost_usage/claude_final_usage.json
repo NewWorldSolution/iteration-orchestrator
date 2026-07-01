@@ -1,0 +1,12 @@
+{
+  "type": "result",
+  "subtype": "success",
+  "model": "claude-sonnet-4-5",
+  "usage": {
+    "input_tokens": 1000,
+    "output_tokens": 200,
+    "cache_read_input_tokens": 300,
+    "cache_creation_input_tokens": 400
+  },
+  "result": "fixture result"
+}

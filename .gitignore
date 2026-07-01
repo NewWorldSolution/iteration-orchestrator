@@ -1,0 +1,37 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+
+# Virtualenvs
+.venv/
+venv/
+env/
+
+# Tooling caches
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+
+# Environment / secrets — never commit
+.env
+*.env
+!.env.example
+
+# Orchestrator runtime artifacts (per-run logs, worktrees) — never commit.
+# Do NOT blanket-ignore *.jsonl: test fixtures under tests/ are .jsonl
+# (e.g. tests/fixtures/cost_usage/codex_turn_completed.jsonl). Runtime
+# cost/state jsonl live under logs/ and are already covered by the logs/ rule.
+logs/
+.orch/worktrees/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

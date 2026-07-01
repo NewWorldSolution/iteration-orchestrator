@@ -1,0 +1,157 @@
+# Example orchestrator pack for a multi-tenant financial SaaS.
+# Values are illustrative and intentionally sanitized.
+
+project:
+  name: financial-saas-example
+  main_branch: main
+  phase_branch_pattern: "phase-{phase}"
+  iteration_branch_pattern: "{phase}/iteration-{n}"
+  task_branch_pattern: "{phase}/i{n}/t{k}-{slug}"
+
+stack:
+  install: "pip install -r requirements.txt"
+  test: "pytest -q"
+  lint: "ruff check ."
+  typecheck: null
+  build: null
+  test_env:
+    ENVIRONMENT: test
+  acceptance_timeout_seconds: 900
+
+scaffold:
+  post_phase_docs_root: "docs/post-phase-organization"
+  post_phase_iteration_root: "iterations/post-phase"
+  tooling_iteration_root: "iterations/tools"
+  post_phase_integration_branch: "post-phase-integration"
+
+ui_route_visibility:
+  route_globs:
+    - "app/routes/*.py"
+    - "app/templates/**/*.html"
+  nav_anchor_paths:
+    - "app/templates/base.html"
+    - "app/templates/_nav.html"
+
+tasks_schema:
+  planning_refusal_prefixes:
+    - "app/"
+    - "db/"
+    - "tests/"
+    - "static/"
+    - "seed/"
+    - "migrations/"
+    - "migration/"
+
+patterns:
+  task_id: '^I(\d+)-T(\d+)$'
+  task_detail_heading: '^###\s+(?P<id>I\d+-T\d+)\s+—\s+(?P<title>.+?)\s*$'
+  phase_branch: '^phase-[A-Za-z0-9][A-Za-z0-9_-]*$'
+
+invariants:
+  - name: "Tenant isolation"
+    applies: "applies"
+    evidence: "cross-tenant test or N/A rationale"
+    status: "<PASS/FAIL/N/A>"
+  - name: "VAT/gross/derived values"
+    applies: "applies"
+    evidence: "focused calculation test or N/A rationale"
+    status: "<PASS/FAIL/N/A>"
+  - name: "Soft-delete"
+    applies: "applies"
+    evidence: "filtered-query test or N/A rationale"
+    status: "<PASS/FAIL/N/A>"
+  - name: "FK-only leaf categories"
+    applies: "applies"
+    evidence: "database or service test"
+    status: "<PASS/FAIL/N/A>"
+  - name: "No LLM in deterministic logic"
+    applies: "applies"
+    evidence: "code inspection"
+    status: "<PASS/FAIL/N/A>"
+
+risk:
+  high_risk_globs:
+    - "**/schema.sql"
+    - "**/init_db.py"
+    - "**/main.py"
+    - "**/auth*.py"
+    - "**/*migration*"
+  sensitive_files:
+    - ".env"
+    - "credentials.json"
+    - "secrets.yaml"
+    - ".secrets"
+  forbidden_patterns:
+    - "except: pass"
+    - "except:pass"
+    - "DROP DATABASE"
+    - "Decimal(float("
+    - "nosec"
+
+agents:
+  claude:
+    type: claude
+    cmd: "claude -p"
+    family: anthropic
+  codex:
+    type: codex
+    cmd: "codex exec"
+    family: openai
+
+model_routing:
+  agent_overrides:
+    claude:
+      model_flag: "--model"
+      tier_models:
+        standard: "claude-haiku-example"
+        strong: "claude-sonnet-example"
+        max: "claude-opus-example"
+    codex:
+      model_flag: "-m"
+      tier_models:
+        standard: "gpt-example"
+        strong: "gpt-example"
+        max: "gpt-example"
+      effort_flags:
+        low:
+          args: ["-c", "model_reasoning_effort=low"]
+        medium:
+          args: ["-c", "model_reasoning_effort=medium"]
+        high:
+          args: ["-c", "model_reasoning_effort=high"]
+        max:
+          args: ["-c", "model_reasoning_effort=xhigh"]
+
+timeouts:
+  impl_low: 2400
+  impl_medium: 3000
+  impl_high: 3600
+  fix_low: 1200
+  fix_medium: 1500
+  fix_high: 1800
+  review: 1800
+  qa: 900
+  retro: 900
+  acceptance: 900
+  ci: 300
+
+costs:
+  anthropic:
+    input: 3.0
+    output: 15.0
+    cache_read_input: 0.30
+    cache_creation_input: 3.75
+    models: {}
+  openai:
+    input: 2.5
+    cached_input: 0.25
+    output: 10.0
+    models: {}
+
+auto_merge:
+  max_diff_insertions: 1200
+  ci_wait_seconds: 300
+  no_ci: false
+
+limits:
+  max_diff_insertions_hard: 2500

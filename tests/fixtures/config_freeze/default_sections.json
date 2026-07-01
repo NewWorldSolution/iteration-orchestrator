@@ -1,0 +1,42 @@
+{
+  "paths": {
+    "iteration_root": "iterations",
+    "artifact_root": "tools/logs",
+    "worktree_root": ".orch/worktrees",
+    "project_config": ".orch/project.yaml",
+    "task_board_filename": "tasks.md",
+    "iteration_prompt_filename": "prompt.md",
+    "task_prompts_dir": "prompts",
+    "task_reviews_dir": "reviews",
+    "prompt_factory_log_dirname": "prompt-factory",
+    "generated_artifact_exclusion_prefixes": ["tools/logs/"]
+  },
+  "templates": {
+    "prompt_rules_path": "templates/_prompt_rules.md",
+    "review_template_path": "templates/_review_template.md"
+  },
+  "scaffold": {
+    "post_phase_docs_root": "docs/post-phase",
+    "post_phase_iteration_root": "iterations/post-phase",
+    "tooling_iteration_root": "iterations/tools",
+    "post_phase_integration_branch": "post-phase-integration"
+  },
+  "ui_route_visibility": {
+    "route_globs": ["app/routes/*.py", "app/templates/**/*.html"],
+    "nav_anchor_paths": [
+      "app/templates/base.html",
+      "app/templates/_nav.html",
+      "app/templates/partials/_nav.html",
+      "app/templates/nav.html"
+    ]
+  },
+  "patterns": {
+    "task_id": "^TASK-(\\d+)-(\\d+)$",
+    "pattern_keys": [
+      "task_id",
+      "task_detail_heading",
+      "iteration_id",
+      "phase_branch"
+    ]
+  }
+}
